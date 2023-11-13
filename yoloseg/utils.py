@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-
+import matplotlib.pyplot as plt
 class_names = ['person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat', 'traffic light',
                'fire hydrant', 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep', 'cow',
                'elephant', 'bear', 'zebra', 'giraffe', 'backpack', 'umbrella', 'handbag', 'tie', 'suitcase', 'frisbee',
@@ -119,12 +119,33 @@ def draw_masks(image, boxes, class_ids, mask_alpha=0.3, mask_maps=None):
         else:
             crop_mask = mask_maps[i][y1:y2, x1:x2, np.newaxis]
             crop_mask_img = mask_img[y1:y2, x1:x2]
+            # cv2.imwrite("crop_mask_img"+str(i)+".jpg", crop_mask_img)
             crop_mask_img = crop_mask_img * (1 - crop_mask) + crop_mask * color
+            # cv2.imwrite("crop_mask2_img"+str(i)+".jpg", crop_mask_img)
             mask_img[y1:y2, x1:x2] = crop_mask_img
-
+    # cv2.imshow('mask_image', mask_img)
+    # cv2.imwrite('mask_image.jpg', mask_img)
     return cv2.addWeighted(mask_img, mask_alpha, image, 1 - mask_alpha, 0)
 
 
+def save_by_plt(x,y,save_name):
+    # 创建 2 维直方图，并获取直方图统计的数值
+    H, xedges, yedges = np.histogram2d(x, y, bins=20)
+    xpos, ypos = np.meshgrid(xedges[:-1] + 0.05, yedges[:-1] + 0.05)
+    xpos = xpos.flatten()
+    ypos = ypos.flatten()
+    zpos = np.zeros_like(xpos)
+
+    # 设置柱状图的参数
+    dx = dy = 0.1 * np.ones_like(zpos)
+    dz = H.flatten()
+
+    # 画 2D 柱状图
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.bar3d(xpos, ypos, zpos, dx, dy, dz, color='b', zsort='average')
+    # plt.show()
+    plt.savefig(save_name)
 def draw_comparison(img1, img2, name1, name2, fontsize=2.6, text_thickness=3):
     (tw, th), _ = cv2.getTextSize(text=name1, fontFace=cv2.FONT_HERSHEY_DUPLEX,
                                   fontScale=fontsize, thickness=text_thickness)

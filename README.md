@@ -59,3 +59,10 @@ The original YOLOv8 Instance Segmentation model can be found in this repository:
 * yolov5-seg-opencv-onnxruntime-cpp: https://github.com/UNeedCryDear/yolov5-seg-opencv-onnxruntime-cpp
 * PINTO0309's model zoo: https://github.com/PINTO0309/PINTO_model_zoo
 * PINTO0309's model conversion tool: https://github.com/PINTO0309/openvino2tensorflow
+
+
+# Features:
+1. 预处理方式：
+  * 直接resize
+  * 保存原始长宽比，将原始内容位于左上，填充位于右下
+  //TODO: 添加新的resize方式， 原始图片位于resize后的中央
